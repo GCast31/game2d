@@ -1,0 +1,64 @@
+{
+    // Utilisez IntelliSense pour en savoir plus sur les attributs possibles.
+    // Pointez pour afficher la description des attributs existants.
+    // Pour plus d'informations, visitez : https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in library 'game2d'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--lib",
+                    "--package=game2d"
+                ],
+                "filter": {
+                    "name": "game2d",
+                    "kind": "lib"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 'game2d'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=game2d",
+                    "--package=game2d"
+                ],
+                "filter": {
+                    "name": "game2d",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable 'game2d'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=game2d",
+                    "--package=game2d"
+                ],
+                "filter": {
+                    "name": "game2d",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}
