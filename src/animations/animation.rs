@@ -1,4 +1,4 @@
-use crate::game2d::graphics::graphics::Drawable;
+use crate::graphics::graphics::Drawable;
 use std::time::SystemTime;
 
 pub struct Animation {

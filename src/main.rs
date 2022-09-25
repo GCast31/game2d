@@ -10,12 +10,10 @@
 */
 
 
-mod game2d;
-
 use game2d::game::game::*;
-use game2d::graphics::graphics::{Draw, Graphics, DrawMode};
+use game2d::graphics::graphics::{Graphics, DrawMode};
 
-use crate::game2d::inputs::keyboard::Keyboard;
+use game2d::inputs::keyboard::Keyboard;
 
 use game2d::graphics::color::*;
 use game2d::inputs::keyboard::Keys;

@@ -1,9 +1,7 @@
 
 use std::collections::HashMap;
-use crate::game2d::animations::animation::Animation;
-use crate::game2d::graphics::graphics::Drawable;
-
-
+use crate::animations::animation::Animation;
+use crate::graphics::graphics::Drawable;
 
 pub struct AnimationsManager {
     current: Option<String>,

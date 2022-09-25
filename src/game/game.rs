@@ -1,8 +1,8 @@
 
 use std::time::{Instant, Duration};
 
-use crate::game2d::graphics::graphics::Graphics;
-use crate::game2d::inputs::keyboard::{Keys, Keyboard};
+use crate::graphics::graphics::Graphics;
+use crate::inputs::keyboard::{Keys, Keyboard};
 use sdl2::event::Event;
 
 #[allow(dead_code)]

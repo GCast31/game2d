@@ -19,7 +19,7 @@ pub struct _Image {
     filename: String,
     width: u32,
     height: u32,
-    pub(in crate::game2d) texture: sdl2::render::Texture,
+    pub(super) texture: sdl2::render::Texture,
 }
 
 impl Drawable for _Image {
