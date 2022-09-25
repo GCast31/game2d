@@ -193,8 +193,8 @@ impl Graphics {
 
         self.sdl_canvas
             .draw_line(
-                sdl2::rect::Point::new(x1, y1),
-                sdl2::rect::Point::new(x2, y2),
+                sdl2::rect::Point::new(x1 as i32, y1 as i32),
+                sdl2::rect::Point::new(x2 as i32, y2 as i32),
             )
             .unwrap();
         
@@ -219,13 +219,13 @@ impl Graphics {
         match mode {
             DrawMode::Fill => {
                 self.sdl_canvas
-                    .fill_rect(sdl2::rect::Rect::new( x, y, width, height)) 
+                    .fill_rect(sdl2::rect::Rect::new( x as i32, y as i32, width, height)) 
                     .unwrap();
         
             },
             DrawMode::Line => {
                 self.sdl_canvas
-                    .draw_rect(sdl2::rect::Rect::new( x, y, width, height)) 
+                    .draw_rect(sdl2::rect::Rect::new( x as i32, y as i32, width, height)) 
                     .unwrap();
             },
         }
@@ -297,20 +297,20 @@ impl Graphics {
 
         match image {
             Some(i) => {
-                let mut dst = sdl2::rect::Rect::new(x, y, i.get_width(), i.get_height());
+                let mut dst = sdl2::rect::Rect::new(x as i32, y as i32, i.get_width(), i.get_height());
 
                 let mut src: Option<sdl2::rect::Rect> = Option::None;
 
                 if let Some(q) = drawable.get_quad() {
-                    let rect = sdl2::rect::Rect::new(q.get_x(), q.get_y(), q.get_width(), q.get_height());
+                    let rect = sdl2::rect::Rect::new(q.get_x() as i32, q.get_y() as i32 , q.get_width(), q.get_height());
                     src = Some(rect);
                     dst.h = ((rect.h as Transformation) * sx) as i32;
                     dst.w = ((rect.w as Transformation) * sy) as i32;
                 }
 
                 let mut w_center = Option::None;
-                if ox!=0 && oy!=0 {
-                    w_center = Some(sdl2::rect::Point::new(ox, oy));
+                if ox!=0. && oy!=0. {
+                    w_center = Some(sdl2::rect::Point::new(ox as i32, oy as i32));
                 }
 
                 self.sdl_canvas
@@ -329,5 +329,3 @@ impl Graphics {
         }
     }
 }
-
-

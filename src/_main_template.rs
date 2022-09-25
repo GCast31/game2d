@@ -96,8 +96,8 @@ pub fn keypressed(graphics: &mut Graphics, game: &mut Option<MyGame>, key: &Keys
 #[allow(unused_variables)]
 pub fn draw(graphics: &mut Graphics, game: &mut Option<MyGame>) {
   
-    graphics.rectangle(DrawMode::Fill, 0, 0, GAME_WINDOW_WIDTH, 32, Some(Color::GREEN));
-    graphics.rectangle(DrawMode::Fill, 0, GAME_WINDOW_HEIGHT - 32, GAME_WINDOW_WIDTH, 32, Some(Color::RED));
+    graphics.rectangle(DrawMode::Fill, 0, 0, GAME_WINDOW_WIDTH as f32, 32, Some(Color::GREEN));
+    graphics.rectangle(DrawMode::Fill, 0, GAME_WINDOW_HEIGHT as f32 - 32., GAME_WINDOW_WIDTH, 32, Some(Color::RED));
 
 }
 
