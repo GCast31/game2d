@@ -22,8 +22,8 @@ use game2d::inputs::keyboard::Keys;
 // ################################################################################################################
 // #                                      C O N S T R A N T E S  FOR  G A M E                                     #
 // ################################################################################################################
-pub const GAME_WINDOW_HEIGHT: u32 = 600;
-pub const GAME_WINDOW_WIDTH: u32 = 800;
+pub const GAME_WINDOW_HEIGHT: Dimension = 600;
+pub const GAME_WINDOW_WIDTH: Dimension = 800;
 
 // ################################################################################################################
 // #                                        S T R U C T U R E    M Y G A M E                                      #
@@ -77,7 +77,7 @@ pub fn load(graphics: &mut Graphics, game: &mut Option<MyGame>) {
 // #                                                   U P D A T E                                                #
 // ################################################################################################################ 
 #[allow(unused_variables)]
-pub fn update(graphics: &mut Graphics, game: &mut Option<MyGame>, keyboard: &mut Keyboard, dt: f32) {
+pub fn update(graphics: &mut Graphics, game: &mut Option<MyGame>, keyboard: &mut Keyboard, dt: DeltaTime) {
  
 }
 
@@ -97,7 +97,7 @@ pub fn keypressed(graphics: &mut Graphics, game: &mut Option<MyGame>, key: &Keys
 pub fn draw(graphics: &mut Graphics, game: &mut Option<MyGame>) {
   
     graphics.rectangle(DrawMode::Fill, 0, 0, GAME_WINDOW_WIDTH, 32, Some(Color::GREEN));
-    graphics.rectangle(DrawMode::Fill, 0, GAME_WINDOW_HEIGHT as i32 - 32, GAME_WINDOW_WIDTH, 32, Some(Color::RED));
+    graphics.rectangle(DrawMode::Fill, 0, GAME_WINDOW_HEIGHT - 32, GAME_WINDOW_WIDTH, 32, Some(Color::RED));
 
 }
 

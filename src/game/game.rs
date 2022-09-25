@@ -5,14 +5,14 @@ use crate::graphics::graphics::Graphics;
 use crate::inputs::keyboard::{Keys, Keyboard};
 use sdl2::event::Event;
 
-use super::common::Fps;
+use super::common::{Fps, DeltaTime};
 
 #[allow(dead_code)]
 pub type GameCallbackDraw<T>        = fn(&mut Graphics, &mut Option<T>);
 pub type GameCallbackKeyPressed<T>  = fn(&mut Graphics, &mut Option<T>, &Keys);
 pub type GameCallbackLoad<T>        = fn(&mut Graphics, &mut Option<T>);
 pub type GameCallbackQuit<T>        = fn(&mut Graphics, &mut Option<T>);
-pub type GameCallbackUpdate<T>      = fn(&mut Graphics, &mut Option<T>, &mut Keyboard, f32);
+pub type GameCallbackUpdate<T>      = fn(&mut Graphics, &mut Option<T>, &mut Keyboard, DeltaTime);
 
 
 #[allow(dead_code)]
