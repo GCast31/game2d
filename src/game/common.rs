@@ -10,10 +10,16 @@ pub type Velocity = f32;
 pub type DeltaTime = f32;
 
 // 2D
+#[derive(Clone, Copy)]
 pub struct Velocity2d{pub x: Velocity, pub y: Velocity }
+
+#[derive(Clone, Copy)]
 pub struct Point2d{ pub x: Position, pub y: Position }
+
+#[derive(Clone, Copy)]
 pub struct Dimension2d{ pub h: Dimension, pub w: Dimension }
 
+#[derive(Clone, Copy)]
 pub struct Scale2d{ pub sx: Transformation, pub sy: Transformation }
 
 impl Point2d {
