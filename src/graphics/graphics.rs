@@ -298,6 +298,8 @@ impl Graphics {
         match image {
             Some(i) => {
                 let mut dst = sdl2::rect::Rect::new(x as i32, y as i32, i.get_width(), i.get_height());
+                dst.h = ((dst.h as Transformation) * sx) as i32;
+                dst.w = ((dst.w as Transformation) * sy) as i32;
 
                 let mut src: Option<sdl2::rect::Rect> = Option::None;
 
