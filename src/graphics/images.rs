@@ -10,6 +10,8 @@
 use sdl2::image::LoadTexture;
 use std::collections::HashMap;
 
+use crate::game::common::{Dimension, Position};
+
 use super::graphics::Drawable;
 
 /*================================================================
@@ -17,8 +19,8 @@ use super::graphics::Drawable;
  *================================================================*/
 pub struct _Image {
     filename: String,
-    width: u32,
-    height: u32,
+    width: Dimension,
+    height: Dimension,
     pub(super) texture: sdl2::render::Texture,
 }
 
@@ -30,11 +32,11 @@ impl Drawable for _Image {
     fn get_quad(&self) -> Option<Quad> {
         Option::None
     }
-    fn get_width(&self) -> u32 {
+    fn get_width(&self) -> Dimension {
         self.width
     }
 
-    fn get_height(&self) -> u32 {
+    fn get_height(&self) -> Dimension {
         self.height
     }
 }
@@ -44,12 +46,12 @@ impl Drawable for _Image {
  */
 pub struct Image {
     filename: String,
-    width: u32,
-    height: u32,
+    width: Dimension,
+    height: Dimension,
 }
 
 impl Image {
-    pub fn new(filename: String, width: u32, height: u32) -> Image {
+    pub fn new(filename: String, width: Dimension, height: Dimension) -> Image {
         Image { filename, width, height }
     }
 }
@@ -62,11 +64,11 @@ impl Drawable for Image {
     fn get_quad(&self) -> Option<Quad> {
         Option::None
     }
-    fn get_width(&self) -> u32 {
+    fn get_width(&self) -> Dimension {
         self.width
     }
 
-    fn get_height(&self) -> u32 {
+    fn get_height(&self) -> Dimension {
         self.height
     }
 }
@@ -76,21 +78,21 @@ impl Drawable for Image {
  */
 pub struct Quad {
     filename: String,
-    x: i32,
-    y: i32,
-    width: u32,
-    height: u32,
+    x: Position,
+    y: Position,
+    width: Dimension,
+    height: Dimension,
 }
 
 
 impl Quad {
-    pub fn new(filename: String, x: i32, y: i32, width: u32, height: u32) -> Quad {
+    pub fn new(filename: String, x: Position, y: Position, width: Dimension, height: Dimension) -> Quad {
         Quad { filename, x, y, width, height }
     }
-    pub fn get_x(&self) -> i32 {
+    pub fn get_x(&self) -> Position {
         self.x
     }
-    pub fn get_y(&self) -> i32 {
+    pub fn get_y(&self) -> Position {
         self.y
     }
 }
@@ -109,10 +111,10 @@ impl Drawable for Quad {
             y: self.y,
         })
     }
-    fn get_width(&self) -> u32 {
+    fn get_width(&self) -> Dimension {
         self.width
     }
-    fn get_height(&self) -> u32 {
+    fn get_height(&self) -> Dimension {
         self.height
     }
 }

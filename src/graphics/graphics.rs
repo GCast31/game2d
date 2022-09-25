@@ -14,6 +14,8 @@
 
  */
 
+use crate::game::common::*;
+
 use super::images::{ImagesManager, Quad, Image};
 use super::color::Color;
 use sdl2::render::Canvas;
@@ -21,27 +23,15 @@ use sdl2::video::Window;
 use sdl2::EventPump;
 
 pub struct Rectangle {
-    x: i32,
-    y: i32,
-    width: u32,
-    height: u32,
+    x: Position,
+    y: Position,
+    width: Dimension,
+    height: Dimension,
 }
 
 impl Rectangle {
-    pub fn new(x: i32, y: i32, width: u32, height: u32) -> Rectangle {
+    pub fn new(x: Position, y: Position, width: Dimension, height: Dimension) -> Rectangle {
         Rectangle { x, y, width, height }
-    }
-}
-
-pub struct Point {
-    x: i32,
-    y: i32,
-}
-impl Point {
-    pub fn new(x: i32, y: i32) -> Point {
-        Point {
-            x, y
-        }
     }
 }
 
@@ -53,8 +43,8 @@ pub trait Drawable {
 
     fn get_filename(&self) -> String;
     fn get_quad(&self) -> Option<Quad>;
-    fn get_width(&self) -> u32;
-    fn get_height(&self) -> u32;
+    fn get_width(&self) -> Dimension;
+    fn get_height(&self) -> Dimension;
 }
 
 #[allow(dead_code)]
@@ -87,10 +77,10 @@ impl Graphics {
      * @return : Instance of Graphics
      **********************************************************/
     pub fn new(
-        p_title: &str,
-        p_width: u32,
-        p_height: u32,
-        p_fullscreen: bool,
+        title: &str,
+        width: Dimension,
+        height: Dimension,
+        fullscreen: bool,
     ) -> Option<Graphics> {
 
         let sdl_context = sdl2::init().unwrap();
@@ -98,13 +88,13 @@ impl Graphics {
 
         /* Create the window */
         let mut window = video_subsystem
-            .window(p_title, p_width, p_height)
+            .window(title, width, height)
             .position_centered()
             .build()
             .unwrap();
 
         // Full screen ?
-        if p_fullscreen {
+        if fullscreen {
             window
                 .set_fullscreen(sdl2::video::FullscreenType::True)
                 .unwrap();
@@ -193,7 +183,7 @@ impl Graphics {
      *
      * @brief : Draw a line
      */
-    pub fn line(&mut self, x1: i32, y1: i32, x2: i32, y2: i32, color: Option<Color>) {
+    pub fn line(&mut self, x1: Position, y1: Position, x2: Position, y2: Position, color: Option<Color>) {
 
         let actual_color = self.actual_color;
 
@@ -218,7 +208,7 @@ impl Graphics {
      *
      * @brief : Draw a rectangle
      */
-    pub fn rectangle(&mut self, mode: DrawMode, x: i32, y: i32, w: u32, h: u32, color: Option<Color>) {
+    pub fn rectangle(&mut self, mode: DrawMode, x: Position, y: Position, width: Dimension, height: Dimension, color: Option<Color>) {
 
         let actual_color = self.actual_color;
 
@@ -229,13 +219,13 @@ impl Graphics {
         match mode {
             DrawMode::Fill => {
                 self.sdl_canvas
-                    .fill_rect(sdl2::rect::Rect::new( x, y, w, h)) 
+                    .fill_rect(sdl2::rect::Rect::new( x, y, width, height)) 
                     .unwrap();
         
             },
             DrawMode::Line => {
                 self.sdl_canvas
-                    .draw_rect(sdl2::rect::Rect::new( x, y, w, h)) 
+                    .draw_rect(sdl2::rect::Rect::new( x, y, width, height)) 
                     .unwrap();
             },
         }
@@ -265,13 +255,13 @@ impl Graphics {
      *
      * @brief : Create a new quad from an image
      **********************************************************/
-    pub fn new_quad(&self, x: i32, y: i32, width: u32, height: u32, filename: String) -> Result<Quad, String> {
+    pub fn new_quad(&self, x: Position, y: Position, width: Dimension, height: Dimension, filename: String) -> Result<Quad, String> {
         
         // Image must be loaded in the images manager
         if let Some(image) = self.images_manager.get_image(&filename) {
             let image_w = image.get_width();
             let image_h = image.get_height();
-            if x as u32 + width > image_w || y as u32 + height > image_h {
+            if x as Dimension + width > image_w || y as Dimension + height > image_h {
                 return Err(format!("Image {} must contain quad", filename));
             }
             else {
@@ -294,13 +284,13 @@ impl Graphics {
     pub fn draw(
         &mut self,
         drawable: &dyn Drawable, 
-        x: i32, 
-        y: i32, 
-        angle: f64,
-        sx: f32,
-        sy: f32,
-        ox: i32,
-        oy: i32,
+        x: Position, 
+        y: Position, 
+        angle: Angle,
+        sx: Transformation,
+        sy: Transformation,
+        ox: Position,
+        oy: Position,
 
     ) {
         let image = self.images_manager.get_image(drawable.get_filename().as_str());
@@ -312,10 +302,10 @@ impl Graphics {
                 let mut src: Option<sdl2::rect::Rect> = Option::None;
 
                 if let Some(q) = drawable.get_quad() {
-                    let rect = sdl2::rect::Rect::new(q.get_x() as i32, q.get_y() as i32, q.get_width(), q.get_height());
+                    let rect = sdl2::rect::Rect::new(q.get_x(), q.get_y(), q.get_width(), q.get_height());
                     src = Some(rect);
-                    dst.h = ((rect.h as f32) * sx) as i32;
-                    dst.w = ((rect.w as f32) * sy) as i32;
+                    dst.h = ((rect.h as Transformation) * sx) as i32;
+                    dst.w = ((rect.w as Transformation) * sy) as i32;
                 }
 
                 let mut w_center = Option::None;

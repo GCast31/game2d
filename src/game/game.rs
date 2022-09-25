@@ -5,6 +5,8 @@ use crate::graphics::graphics::Graphics;
 use crate::inputs::keyboard::{Keys, Keyboard};
 use sdl2::event::Event;
 
+use super::common::Fps;
+
 #[allow(dead_code)]
 pub type GameCallbackDraw<T>        = fn(&mut Graphics, &mut Option<T>);
 pub type GameCallbackKeyPressed<T>  = fn(&mut Graphics, &mut Option<T>, &Keys);
@@ -64,7 +66,7 @@ impl<T> Game<T> {
      * 
      * @Brief : Set max FPS 
      */
-    pub fn set_max_fps(&mut self, max_fps: Option<f32>) -> &mut Self {
+    pub fn set_max_fps(&mut self, max_fps: Option<Fps>) -> &mut Self {
         self.max_fps = max_fps;
         self
     }
