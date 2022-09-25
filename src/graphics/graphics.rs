@@ -93,6 +93,8 @@ impl Graphics {
         p_fullscreen: bool,
     ) -> Option<Graphics> {
 
+        println!("New graphics");
+
         let sdl_context = sdl2::init().unwrap();
         let video_subsystem = sdl_context.video().unwrap();
 
