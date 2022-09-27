@@ -1,12 +1,14 @@
+use crate::game::common::ColorT;
+
 
 
 
 #[derive(Copy, Clone)]
 pub struct Color {
-    pub r: u8,
-    pub g: u8,
-    pub b: u8,
-    pub a: u8,
+    pub r: ColorT,
+    pub g: ColorT,
+    pub b: ColorT,
+    pub a: ColorT,
 }
 
 #[allow(dead_code)]

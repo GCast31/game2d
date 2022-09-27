@@ -18,10 +18,9 @@ use crate::game::common::*;
 
 use super::images::{ImagesManager, Quad, Image};
 use super::color::Color;
-use sdl2::render::Canvas;
-use sdl2::video::Window;
+use sdl2::render::{Canvas, BlendMode};
+use sdl2::video::{Window};
 use sdl2::EventPump;
-
 pub struct Rectangle {
     x: Position,
     y: Position,
@@ -56,8 +55,9 @@ pub enum DrawMode {
 pub struct Graphics {
 
     sdl_canvas: Canvas<Window>,
-    pub(crate) sdl_event_pump: EventPump,
     images_manager: ImagesManager,
+
+    pub(crate) sdl_event_pump: EventPump,
 
     actual_color: Color,
     default_color: Color,
@@ -86,6 +86,7 @@ impl Graphics {
         let sdl_context = sdl2::init().unwrap();
         let video_subsystem = sdl_context.video().unwrap();
 
+
         /* Create the window */
         let mut window = video_subsystem
             .window(title, width, height)
@@ -100,20 +101,29 @@ impl Graphics {
                 .unwrap();
         }
 
+        // Textures / Primitives ...
         let mut canvas = window.into_canvas().build().unwrap();
+        canvas.set_blend_mode(BlendMode::Blend); // Accept Alpha
 
+        let images_manager = ImagesManager::new(canvas.texture_creator());
+
+        // Font
+        //let mut ttf_context = sdl2::ttf::init().expect("SDL TTF initialization        failed");
+        //let font = ttf_context.load_font("gfx/NITEMARE.TTF", 16).unwrap();
+
+        // Events
         let event_pump = sdl_context.event_pump().unwrap();
 
-        let texture_creator = canvas.texture_creator();
-
+        // Clear screen and show
         canvas.clear();
         canvas.present();
 
+        // Create Graphics
         Some(Graphics {
-
             sdl_canvas: canvas,
+            images_manager,
+
             sdl_event_pump: event_pump,
-            images_manager: ImagesManager::new(texture_creator),
 
             actual_color: Color::BLACK,
             default_color: Color::BLACK,
@@ -164,6 +174,7 @@ impl Graphics {
 
         self.set_color_to_default();
         self.sdl_canvas.clear();
+
     }
 
     /***********************************************************
@@ -246,7 +257,7 @@ impl Graphics {
     pub fn new_image(
         &mut self,
         filename: &str,
-    ) -> Result<Image, String> {
+    ) -> Result<(), String> {
         self.images_manager.new_image(filename)
     }
 

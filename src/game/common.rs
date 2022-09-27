@@ -8,6 +8,8 @@ pub type Dimension = u32;
 pub type Transformation = f32;
 pub type Velocity = f32;
 pub type DeltaTime = f32;
+pub type ColorT = u8;
+pub type FontSize = u16;
 
 // 2D
 #[derive(Clone, Copy)]

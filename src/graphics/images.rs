@@ -149,13 +149,9 @@ impl ImagesManager {
     pub(crate) fn new_image(
         &mut self,
         filename: &str,
-    ) -> Result<Image, String> {
+    ) -> Result<(), String> {
         if let Some(image) = self.images.get(&filename.to_string()) {
-            return Ok(Image {
-                filename: image.get_filename(),
-                height: image.get_height(),
-                width: image.get_width(),
-            });
+            return Ok(());
         }
 
         let texture_result = self.texture_creator.load_texture(filename);
@@ -181,7 +177,7 @@ impl ImagesManager {
 
         self.images.insert(filename.to_string(), image);
 
-        Ok(Image { filename: filename.to_string(), width, height })
+        Ok(())
     }
 
     /*
