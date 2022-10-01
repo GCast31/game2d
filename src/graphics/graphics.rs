@@ -16,11 +16,17 @@
 
 use crate::game::common::*;
 
-use super::images::{ImagesManager, Quad, Image};
+use super::fonts::{FontsManager, FontDetail, FontContext};
+use super::images::{ImagesManager, Quad, Image, _Image};
 use super::color::Color;
-use sdl2::render::{Canvas, BlendMode};
-use sdl2::video::{Window};
+use sdl2::render::{Canvas, BlendMode, TextureCreator};
+use sdl2::ttf::Sdl2TtfContext;
+use sdl2::video::{Window, WindowContext};
 use sdl2::EventPump;
+
+pub type FontsCreator = TextureCreator<WindowContext>;
+
+#[allow(dead_code)]
 pub struct Rectangle {
     x: Position,
     y: Position,
@@ -55,12 +61,15 @@ pub enum DrawMode {
 pub struct Graphics {
 
     sdl_canvas: Canvas<Window>,
+
     images_manager: ImagesManager,
 
     pub(crate) sdl_event_pump: EventPump,
 
     actual_color: Color,
     default_color: Color,
+
+    actual_font: Option<FontDetail>,
 }
 
 #[allow(dead_code)]
@@ -107,10 +116,6 @@ impl Graphics {
 
         let images_manager = ImagesManager::new(canvas.texture_creator());
 
-        // Font
-        //let mut ttf_context = sdl2::ttf::init().expect("SDL TTF initialization        failed");
-        //let font = ttf_context.load_font("gfx/NITEMARE.TTF", 16).unwrap();
-
         // Events
         let event_pump = sdl_context.event_pump().unwrap();
 
@@ -127,7 +132,26 @@ impl Graphics {
 
             actual_color: Color::BLACK,
             default_color: Color::BLACK,
+
+            actual_font: Option::None,
         })
+    }
+
+    /***********************************************************
+     * get_fonts_creator
+     *
+     * @Brief : Create a texture for fonts
+     */
+    pub fn get_fonts_creator(&mut self) -> FontsCreator {
+        self.sdl_canvas.texture_creator() as FontsCreator
+    }
+
+    /***********************************************************
+     * create_fonts_context()
+     * 
+     */
+    pub fn create_fonts_context() -> FontContext<'static> {
+        sdl2::ttf::init().unwrap() as FontContext
     }
 
     /***********************************************************
@@ -165,12 +189,22 @@ impl Graphics {
         self.sdl_canvas.set_draw_color(self.default_color.to_sdl_color());
     }
 
+
+    /***********************************************************
+     * set_font()
+     *
+     * @Brief : Set font
+     */
+    pub fn set_font(&mut self, font_detail: FontDetail) {
+        self.actual_font = Some(font_detail);
+    }
+
     /***********************************************************
      * begin_draw()
      *
      * @brief : Prepare to drawing, call before drawing
      **********************************************************/
-    pub fn begin_draw(&mut self) {
+    pub(crate) fn begin_draw(&mut self) {
 
         self.set_color_to_default();
         self.sdl_canvas.clear();
@@ -182,7 +216,7 @@ impl Graphics {
      *
      * @brief : Call after drawing
      **********************************************************/
-    pub fn end_draw(&mut self) {
+    pub(crate) fn end_draw(&mut self) {
         self.sdl_canvas.present();
     }
 
@@ -257,7 +291,7 @@ impl Graphics {
     pub fn new_image(
         &mut self,
         filename: &str,
-    ) -> Result<(), String> {
+    ) -> Result<Image, String> {
         self.images_manager.new_image(filename)
     }
 
@@ -339,6 +373,126 @@ impl Graphics {
                     .unwrap();
             }
             None => {}
+        }
+    }
+
+    fn _draw_image(
+        &mut self,
+        _image: &_Image, 
+        x: Position, 
+        y: Position, 
+        angle: Angle,
+        sx: Transformation,
+        sy: Transformation,
+        ox: Position,
+        oy: Position,
+
+    ) {
+        let mut dst = sdl2::rect::Rect::new(x as i32, y as i32, _image.get_width(), _image.get_height());
+        dst.h = ((dst.h as Transformation) * sx) as i32;
+        dst.w = ((dst.w as Transformation) * sy) as i32;
+
+        let mut src: Option<sdl2::rect::Rect> = Option::None;
+
+        if let Some(q) = _image.get_quad() {
+            let rect = sdl2::rect::Rect::new(q.get_x() as i32, q.get_y() as i32 , q.get_width(), q.get_height());
+            src = Some(rect);
+            dst.h = ((rect.h as Transformation) * sx) as i32;
+            dst.w = ((rect.w as Transformation) * sy) as i32;
+        }
+
+        let mut w_center = Option::None;
+        if ox!=0. && oy!=0. {
+            w_center = Some(sdl2::rect::Point::new(ox as i32, oy as i32));
+        }
+
+        match  self.sdl_canvas
+            .copy_ex(
+                &_image.texture, 
+                src, 
+                dst, 
+                angle, 
+                w_center, 
+                false,
+                false 
+            ) {
+                Ok(_) => {},
+                Err(e) => println!("{}", e),
+            }
+    }
+
+    //=======================================================================
+    //                                 FONTS
+    //=======================================================================
+    /***********************************************************
+     * new_font()
+     *
+     * @brief : Add a new font
+     **********************************************************/
+    //  pub fn new_font(
+    //     &'ttf mut self,
+    //     filename: &str,
+    //     point_size: u16,
+    // ) -> Result<FontDetail, String> {
+    //     self.fonts_manager.load_font(filename, point_size)
+    // }
+
+    /***********************************************************
+     * print()
+     *
+     * @brief : Add a new font
+     **********************************************************/
+     pub fn print(
+        &mut self,
+        fonts_manager: &mut FontsManager,
+        texte: String,
+        x: Position, 
+        y: Position, 
+        color: Option<Color>,
+     ) {
+
+        let mut local_color = self.actual_color.clone();
+        if let Some(color) = color {
+            local_color = color.clone();
+        }
+
+        if let Some(font_detail) = &mut self.actual_font {
+            if let Some(texture) = fonts_manager.draw_font(&font_detail, texte, &local_color) {
+                let image = _Image::from_texture(texture);
+                self._draw_image(&image, x, y, 0., 1., 1., 0., 0.);
+            }
+        }
+    }
+    
+    /***********************************************************
+     * print_full()
+     *
+     * @brief : Add a new font
+     **********************************************************/
+     pub fn print_full(
+        &mut self,
+        fonts_manager: &mut FontsManager,
+        texte: String,
+        x: Position, 
+        y: Position, 
+        color: Option<Color>,
+        angle: Angle,
+        sx: Transformation,
+        sy: Transformation,
+        ox: Position,
+        oy: Position,
+     ) {
+
+        let mut local_color = self.actual_color.clone();
+        if let Some(color) = color {
+            local_color = color.clone();
+        }
+
+        if let Some(font_detail) = &mut self.actual_font {
+            if let Some(texture) = fonts_manager.draw_font(&font_detail, texte, &local_color) {
+                let image = _Image::from_texture(texture);
+                self._draw_image(&image, x, y, angle, sx, sy, ox, oy);
+            }
         }
     }
 }

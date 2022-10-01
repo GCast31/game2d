@@ -1,6 +1,7 @@
 
 use std::time::{Instant, Duration};
 
+use crate::graphics::fonts::FontsManager;
 use crate::graphics::graphics::Graphics;
 use crate::inputs::keyboard::{Keys, Keyboard};
 use sdl2::event::Event;
@@ -8,7 +9,7 @@ use sdl2::event::Event;
 use super::common::{Fps, DeltaTime};
 
 #[allow(dead_code)]
-pub type GameCallbackDraw<T>        = fn(&mut Graphics, &mut Option<T>);
+pub type GameCallbackDraw<T>        = fn(&mut Graphics, &mut Option<T>, &mut Option<FontsManager>);
 pub type GameCallbackKeyPressed<T>  = fn(&mut Graphics, &mut Option<T>, &Keys);
 pub type GameCallbackLoad<T>        = fn(&mut Graphics, &mut Option<T>);
 pub type GameCallbackQuit<T>        = fn(&mut Graphics, &mut Option<T>);
@@ -19,6 +20,7 @@ pub type GameCallbackUpdate<T>      = fn(&mut Graphics, &mut Option<T>, &mut Key
 pub struct Game<T> { 
 
     graphics: Graphics,
+
     max_fps: Option<f32>,
 
     params: Option<T>,
@@ -39,6 +41,7 @@ impl<T> Game<T> {
      * @Brief : Create a new game 
      */
     pub fn new(graphics: Graphics) -> Game<T> {
+
         Game {
             graphics,
             max_fps: Option::None,
@@ -47,7 +50,7 @@ impl<T> Game<T> {
             callback_draw: Option::None, 
             callback_quit: Option::None, 
             callback_load: Option::None,
-            callback_keypressed: Option::None, 
+            callback_keypressed: Option::None,
         }
     }
 
@@ -126,13 +129,13 @@ impl<T> Game<T> {
      * 
      * @Brief : Main loop of the game
      */
-    pub fn run(&mut self) -> &mut Self {
+    pub fn run(&mut self, fonts_manager: &mut Option<FontsManager>) -> &mut Self {
 
         let mut keyboard: Keyboard = Keyboard::default();
 
         // Load
         if let Some(l) = self.callback_load {
-            l(&mut self.graphics, &mut self.params);
+             l(&mut self.graphics, &mut self.params);
         }
 
         let mut timer_start = Instant::now();
@@ -188,7 +191,7 @@ impl<T> Game<T> {
 
             // Draw callback ?
             if let Some(d) = self.callback_draw {
-                d(&mut self.graphics, &mut self.params);
+                d(&mut self.graphics, &mut self.params, fonts_manager);
             }
 
             // After drawing

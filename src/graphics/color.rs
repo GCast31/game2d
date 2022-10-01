@@ -14,7 +14,7 @@ pub struct Color {
 #[allow(dead_code)]
 impl Color {
 
-    pub(super) fn to_sdl_color(&self) -> sdl2::pixels::Color {
+    pub(crate) fn to_sdl_color(&self) -> sdl2::pixels::Color {
         sdl2::pixels::Color {
             r: self.r,
             g: self.g,

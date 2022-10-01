@@ -9,32 +9,33 @@
     @Author : GCast31
 */
 
-
+use game2d::game::common::{GAME_FONT_DEFAULT_, GAME_FONT_DEFAULT_SIZE, DeltaTime};
 use game2d::game::game::*;
-use game2d::graphics::graphics::{Graphics, DrawMode};
+use game2d::graphics::fonts::FontsManager;
+use game2d::graphics::graphics::Graphics;
 
 use game2d::inputs::keyboard::Keyboard;
-
-use game2d::graphics::color::*;
 use game2d::inputs::keyboard::Keys;
 
 
 // ################################################################################################################
 // #                                      C O N S T R A N T E S  FOR  G A M E                                     #
 // ################################################################################################################
-pub const GAME_WINDOW_HEIGHT: Dimension = 600;
-pub const GAME_WINDOW_WIDTH: Dimension = 800;
+pub const GAME_WINDOW_HEIGHT: u32 = 600;
+pub const GAME_WINDOW_WIDTH: u32 = 800;
+
 
 // ################################################################################################################
-// #                                        S T R U C T U R E    M Y G A M E                                      #
+// #                                        S T R U C T U R E    G A M E                                          #
 // ################################################################################################################
-pub struct MyGame {
+pub struct TemplateGame {
 }
 
 #[allow(dead_code)]
-impl Default for MyGame {
+impl Default for TemplateGame {
     fn default() -> Self {
-        MyGame {
+        TemplateGame {
+            
         }
     }
 }
@@ -44,24 +45,29 @@ impl Default for MyGame {
 // ################################################################################################################
 fn main() {
 
-    // Game
-    Game::new(
-              Graphics::new(
-                "Title", 
-                GAME_WINDOW_WIDTH, 
-                GAME_WINDOW_HEIGHT, 
-                false
-            )
-        .unwrap())
+    let mut graphics = Graphics::new(
+        "Title", 
+        GAME_WINDOW_WIDTH, 
+        GAME_WINDOW_HEIGHT, 
+        false
+    ).unwrap();
 
-        .set_params(MyGame::default())
+    // Fonts
+    let mut font_context = Graphics::create_fonts_context();
+    let mut fonts_manager: FontsManager = FontsManager::new(graphics.get_fonts_creator());
+    let font_detail = fonts_manager.load_font(&mut font_context, GAME_FONT_DEFAULT_.to_string(), GAME_FONT_DEFAULT_SIZE).unwrap();
+    graphics.set_font(font_detail);
+
+    // Game
+    Game::new(graphics)
+        .set_params(TemplateGame::default())
         .set_max_fps(Some(144.))
         .set_callback_draw(draw)
         .set_callback_load(load)
         .set_callback_key_pressed(keypressed)
         .set_callback_update(update)
         .set_callback_quit(quit)
-        .run();
+        .run(&mut Some(fonts_manager));
 
 }
 
@@ -69,15 +75,14 @@ fn main() {
 // #                                                    L O A D                                                   #
 // ################################################################################################################
 #[allow(unused_variables)]
-pub fn load(graphics: &mut Graphics, game: &mut Option<MyGame>) {
-
+pub fn load(graphics: &mut Graphics, game: &mut Option<TemplateGame>) {
 }
 
 // ################################################################################################################
 // #                                                   U P D A T E                                                #
 // ################################################################################################################ 
 #[allow(unused_variables)]
-pub fn update(graphics: &mut Graphics, game: &mut Option<MyGame>, keyboard: &mut Keyboard, dt: DeltaTime) {
+pub fn update(graphics: &mut Graphics, game: &mut Option<TemplateGame>, keyboard: &mut Keyboard, dt: DeltaTime) {
  
 }
 
@@ -86,7 +91,7 @@ pub fn update(graphics: &mut Graphics, game: &mut Option<MyGame>, keyboard: &mut
 // #                                               K E Y P R E S S E D                                            #
 // ################################################################################################################ 
 #[allow(unused_variables)]
-pub fn keypressed(graphics: &mut Graphics, game: &mut Option<MyGame>, key: &Keys) {
+pub fn keypressed(graphics: &mut Graphics, game: &mut Option<TemplateGame>, key: &Keys) {
     
 }
 
@@ -94,17 +99,14 @@ pub fn keypressed(graphics: &mut Graphics, game: &mut Option<MyGame>, key: &Keys
 // #                                                    D R A W                                                   #
 // ################################################################################################################ 
 #[allow(unused_variables)]
-pub fn draw(graphics: &mut Graphics, game: &mut Option<MyGame>) {
+pub fn draw(graphics: &mut Graphics, game: &mut Option<TemplateGame>, fonts_manager: &mut Option<FontsManager>) {
   
-    graphics.rectangle(DrawMode::Fill, 0, 0, GAME_WINDOW_WIDTH as f32, 32, Some(Color::GREEN));
-    graphics.rectangle(DrawMode::Fill, 0, GAME_WINDOW_HEIGHT as f32 - 32., GAME_WINDOW_WIDTH, 32, Some(Color::RED));
-
 }
 
 // ################################################################################################################
 // #                                                    Q U I T                                                   #
 // ################################################################################################################ 
 #[allow(unused_variables)]
-pub fn quit(graphics: &mut Graphics, game: &mut Option<MyGame>) {
+pub fn quit(graphics: &mut Graphics, game: &mut Option<TemplateGame>) {
     println!("Bye");
 }

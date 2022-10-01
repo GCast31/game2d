@@ -17,11 +17,11 @@ use super::graphics::Drawable;
 /*================================================================
  *                         _ I M A G E
  *================================================================*/
-pub struct _Image {
+pub(crate) struct _Image {
     filename: String,
     width: Dimension,
     height: Dimension,
-    pub(super) texture: sdl2::render::Texture,
+    pub(crate) texture: sdl2::render::Texture,
 }
 
 impl Drawable for _Image {
@@ -38,6 +38,32 @@ impl Drawable for _Image {
 
     fn get_height(&self) -> Dimension {
         self.height
+    }
+}
+
+impl From<sdl2::render::Texture> for _Image{
+    fn from(texture: sdl2::render::Texture) -> Self {
+        let height = texture.query().height;
+        let width = texture.query().width;
+        Self {
+            texture,
+            height,
+            width,
+            filename: String::new(),
+        } 
+    }
+}
+
+impl _Image {
+    pub(crate) fn from_texture(texture: sdl2::render::Texture) -> Self {
+        let height = texture.query().height;
+        let width = texture.query().width;
+        Self {
+            texture,
+            height,
+            width,
+            filename: String::new(),
+        }
     }
 }
 
@@ -149,9 +175,9 @@ impl ImagesManager {
     pub(crate) fn new_image(
         &mut self,
         filename: &str,
-    ) -> Result<(), String> {
+    ) -> Result<Image, String> {
         if let Some(image) = self.images.get(&filename.to_string()) {
-            return Ok(());
+            return Ok(Image { filename: image.filename.to_string(), width: image.width, height: image.height });
         }
 
         let texture_result = self.texture_creator.load_texture(filename);
@@ -176,8 +202,9 @@ impl ImagesManager {
         };
 
         self.images.insert(filename.to_string(), image);
-
-        Ok(())
+        
+        Ok(Image {filename: filename.to_string(), height, width})
+    
     }
 
     /*

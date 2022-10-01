@@ -1,5 +1,8 @@
 
 
+pub const GAME_FONT_DEFAULT_: &'static str = "fonts/Vera.ttf";
+pub const GAME_FONT_DEFAULT_SIZE: FontSize = 11;
+
 // Primitives
 pub type Angle = f64;
 pub type Fps = f32;
