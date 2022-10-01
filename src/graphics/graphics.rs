@@ -70,6 +70,7 @@ pub struct Graphics {
     actual_color: Color,
     default_color: Color,
     background_color: Color,
+    font_color: Color,
 
     //==== Fonts
     actual_font: Option<FontDetail>,
@@ -135,9 +136,11 @@ impl Graphics {
 
             actual_color: Color::BLACK,
             default_color: Color::BLACK,
+            background_color: Color::RED,
+            font_color: Color::WHITE,
 
             actual_font: Option::None,
-            background_color: Color::RED,
+            
         })
     }
 
@@ -202,6 +205,17 @@ impl Graphics {
      */
     pub fn set_background_color(&mut self, color: Color) {
         self.background_color = color;
+    }
+
+    /***********************************************************
+     * set_font_color()
+     *
+     * @Brief : Set actual font color
+     *
+     * @parm 1 : Color information
+     */
+    pub fn set_font_color(&mut self, color: Color) {
+        self.font_color = color;
     }
 
     /***********************************************************
@@ -467,17 +481,7 @@ impl Graphics {
         color: Option<Color>,
      ) {
 
-        let mut local_color = self.actual_color.clone();
-        if let Some(color) = color {
-            local_color = color.clone();
-        }
-
-        if let Some(font_detail) = &mut self.actual_font {
-            if let Some(texture) = fonts_manager.draw_font(&font_detail, texte, &local_color) {
-                let image = _Image::from_texture(texture);
-                self._draw_image(&image, x, y, 0., 1., 1., 0., 0.);
-            }
-        }
+        self.print_full(fonts_manager, texte, x, y, color, 0., 1., 1., 0., 0.)
     }
     
     /***********************************************************
