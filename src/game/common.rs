@@ -5,6 +5,19 @@ pub const GAME_FONT_DEFAULT_SIZE: FontSize = 11;
 
 // Primitives
 pub type Angle = f64;
+
+pub fn angle_add(angle_src: Angle, angle_to_add: Angle, cap: bool) -> Angle {
+    let mut new_angle = angle_src + angle_to_add;
+    if cap {
+        if new_angle > 360. { 
+            new_angle = 0.
+        } else if new_angle < 0. {
+            new_angle = 360.
+        }
+    }
+    new_angle
+}
+
 pub type Fps = f32;
 pub type Position = f32;
 pub type Dimension = u32;
