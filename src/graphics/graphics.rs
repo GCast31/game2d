@@ -20,7 +20,6 @@ use super::fonts::{FontsManager, FontDetail, FontContext};
 use super::images::{ImagesManager, Quad, Image, _Image};
 use super::color::Color;
 use sdl2::render::{Canvas, BlendMode, TextureCreator};
-use sdl2::ttf::Sdl2TtfContext;
 use sdl2::video::{Window, WindowContext};
 use sdl2::EventPump;
 
