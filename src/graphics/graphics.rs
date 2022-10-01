@@ -59,15 +59,19 @@ pub enum DrawMode {
 
 pub struct Graphics {
 
+    //===== SDL2
     sdl_canvas: Canvas<Window>,
-
-    images_manager: ImagesManager,
-
     pub(crate) sdl_event_pump: EventPump,
 
+    //==== Images
+    images_manager: ImagesManager,
+
+    //==== Color
     actual_color: Color,
     default_color: Color,
+    background_color: Color,
 
+    //==== Fonts
     actual_font: Option<FontDetail>,
 }
 
@@ -133,6 +137,7 @@ impl Graphics {
             default_color: Color::BLACK,
 
             actual_font: Option::None,
+            background_color: Color::RED,
         })
     }
 
@@ -188,6 +193,16 @@ impl Graphics {
         self.sdl_canvas.set_draw_color(self.default_color.to_sdl_color());
     }
 
+    /***********************************************************
+     * set_background_color()
+     *
+     * @Brief : Set actual background
+     *
+     * @parm 1 : Color information
+     */
+    pub fn set_background_color(&mut self, color: Color) {
+        self.background_color = color;
+    }
 
     /***********************************************************
      * set_font()
@@ -205,8 +220,9 @@ impl Graphics {
      **********************************************************/
     pub(crate) fn begin_draw(&mut self) {
 
-        self.set_color_to_default();
+        self.set_color(self.background_color);
         self.sdl_canvas.clear();
+        self.set_color_to_default();
 
     }
 
@@ -418,6 +434,7 @@ impl Graphics {
                 Ok(_) => {},
                 Err(e) => println!("{}", e),
             }
+
     }
 
     //=======================================================================
