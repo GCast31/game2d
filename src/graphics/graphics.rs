@@ -503,7 +503,7 @@ impl Graphics {
         oy: Position,
      ) {
 
-        let mut local_color = self.actual_color.clone();
+        let mut local_color = self.font_color.clone();
         if let Some(color) = color {
             local_color = color.clone();
         }
