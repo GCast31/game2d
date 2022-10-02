@@ -11,7 +11,7 @@ use super::common::{Fps, DeltaTime, Position};
 use super::inputs::Inputs;
 
 #[allow(dead_code)]
-pub type GameCallbackDraw<T>        = fn(&mut Graphics, &mut Option<T>, &mut Option<FontsManager>);
+pub type GameCallbackDraw<T>        = fn(&mut Graphics, &mut Option<T>, &mut Inputs, &mut Option<FontsManager>);
 pub type GameCallbackKeyPressed<T>  = fn(&mut Graphics, &mut Option<T>, &Keys);
 pub type GameCallbackLoad<T>        = fn(&mut Graphics, &mut Option<T>);
 pub type GameCallbackQuit<T>        = fn(&mut Graphics, &mut Option<T>);
@@ -200,7 +200,7 @@ impl<T> Game<T> {
 
             // Draw callback ?
             if let Some(d) = self.callback_draw {
-                d(&mut self.graphics, &mut self.params, fonts_manager);
+                d(&mut self.graphics, &mut self.params, &mut inputs, fonts_manager);
             }
 
             // After drawing

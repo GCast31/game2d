@@ -83,7 +83,7 @@ pub fn load(graphics: &mut Graphics, game: &mut Option<TemplateGame>) {
 // #                                                   U P D A T E                                                #
 // ################################################################################################################ 
 #[allow(unused_variables)]
-pub fn update(graphics: &mut Graphics, game: &mut Option<TemplateGame>, keyboard: &mut Inputs, dt: DeltaTime) {
+pub fn update(graphics: &mut Graphics, game: &mut Option<TemplateGame>, inputs: &mut Inputs, dt: DeltaTime) {
  
 }
 
@@ -100,7 +100,7 @@ pub fn keypressed(graphics: &mut Graphics, game: &mut Option<TemplateGame>, key:
 // #                                                    D R A W                                                   #
 // ################################################################################################################ 
 #[allow(unused_variables)]
-pub fn draw(graphics: &mut Graphics, game: &mut Option<TemplateGame>, fonts_manager: &mut Option<FontsManager>) {
+pub fn draw(graphics: &mut Graphics, game: &mut Option<TemplateGame>, inputs: &mut Inputs, fonts_manager: &mut Option<FontsManager>) {
   
 }
 
