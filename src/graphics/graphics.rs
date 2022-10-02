@@ -352,10 +352,27 @@ impl Graphics {
     /***********************************************************
      * draw()
      *
-     * @brief : Draw image on screen
+     * @brief : Draw image on screen (simple)
      *
      **********************************************************/
     pub fn draw(
+        &mut self,
+        drawable: &dyn Drawable, 
+        x: Position, 
+        y: Position, 
+        angle: Angle,
+
+    ) {
+        self.draw_full(drawable, x, y, angle, 1., 1., 0., 0.);
+    }
+
+    /***********************************************************
+     * draw_full()
+     *
+     * @brief : Draw image on screen (full (more options))
+     *
+     **********************************************************/
+    pub fn draw_full(
         &mut self,
         drawable: &dyn Drawable, 
         x: Position, 
