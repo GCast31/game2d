@@ -14,6 +14,7 @@ use game2d::game::game::*;
 use game2d::graphics::fonts::FontsManager;
 use game2d::graphics::graphics::Graphics;
 
+use game2d::inputs::mouse::Mouse;
 use game2d::inputs::keyboard::Keyboard;
 use game2d::inputs::keyboard::Keys;
 
@@ -82,7 +83,7 @@ pub fn load(graphics: &mut Graphics, game: &mut Option<TemplateGame>) {
 // #                                                   U P D A T E                                                #
 // ################################################################################################################ 
 #[allow(unused_variables)]
-pub fn update(graphics: &mut Graphics, game: &mut Option<TemplateGame>, keyboard: &mut Keyboard, dt: DeltaTime) {
+pub fn update(graphics: &mut Graphics, game: &mut Option<TemplateGame>, keyboard: &mut Inputs, dt: DeltaTime) {
  
 }
 

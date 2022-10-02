@@ -4,16 +4,18 @@ use std::time::{Instant, Duration};
 use crate::graphics::fonts::FontsManager;
 use crate::graphics::graphics::Graphics;
 use crate::inputs::keyboard::{Keys, Keyboard};
+use crate::inputs::mouse::Mouse;
 use sdl2::event::Event;
 
-use super::common::{Fps, DeltaTime};
+use super::common::{Fps, DeltaTime, Position};
+use super::inputs::Inputs;
 
 #[allow(dead_code)]
 pub type GameCallbackDraw<T>        = fn(&mut Graphics, &mut Option<T>, &mut Option<FontsManager>);
 pub type GameCallbackKeyPressed<T>  = fn(&mut Graphics, &mut Option<T>, &Keys);
 pub type GameCallbackLoad<T>        = fn(&mut Graphics, &mut Option<T>);
 pub type GameCallbackQuit<T>        = fn(&mut Graphics, &mut Option<T>);
-pub type GameCallbackUpdate<T>      = fn(&mut Graphics, &mut Option<T>, &mut Keyboard, DeltaTime);
+pub type GameCallbackUpdate<T>      = fn(&mut Graphics, &mut Option<T>, &mut Inputs, DeltaTime);
 
 
 #[allow(dead_code)]
@@ -131,7 +133,10 @@ impl<T> Game<T> {
      */
     pub fn run(&mut self, fonts_manager: &mut Option<FontsManager>) -> &mut Self {
 
-        let mut keyboard: Keyboard = Keyboard::default();
+        let mut inputs: Inputs = Inputs {
+            keyboard: Keyboard::default(),
+            mouse: Mouse::default(),
+        };
 
         // Load
         if let Some(l) = self.callback_load {
@@ -149,10 +154,14 @@ impl<T> Game<T> {
             for event in self.graphics.sdl_event_pump.poll_iter() {
                 match event {
                     Event::KeyDown { timestamp: _, window_id: _, keycode, scancode: _, keymod: _, repeat: _ } => {
-                        keyboard.add_key_down(Keyboard::_sdl_keycode_to_key(keycode.unwrap()));
+                        inputs.keyboard.add_key_down(Keyboard::_sdl_keycode_to_key(keycode.unwrap()));
                     },
                     Event::KeyUp { timestamp: _, window_id: _, keycode, scancode: _, keymod: _, repeat: _ } => {
-                        keyboard.add_key_up(Keyboard::_sdl_keycode_to_key(keycode.unwrap()));
+                        inputs.keyboard.add_key_up(Keyboard::_sdl_keycode_to_key(keycode.unwrap()));
+                    },
+                    Event::MouseMotion { timestamp: _, window_id: __id, which: _, mousestate: _, x, y, xrel: _, yrel: _ } => {
+                        inputs.mouse.set_x(x as Position);
+                        inputs.mouse.set_y(y as Position);
                     },
                     Event::Quit { .. } => {
                         if let Some(q) = &mut self.callback_quit {
@@ -167,7 +176,7 @@ impl<T> Game<T> {
 
             // Keys released callback ?
             if let Some(k) = self.callback_keypressed {
-                let keys = keyboard.get_keys_pressed();
+                let keys = inputs.keyboard.get_keys_pressed();
                 for key in keys.iter() {
                     k(&mut self.graphics,  &mut self.params, key);
                 }
@@ -186,7 +195,7 @@ impl<T> Game<T> {
                     }
                 }
 
-                u(&mut self.graphics, &mut self.params, &mut keyboard, dt);
+                u(&mut self.graphics, &mut self.params, &mut inputs, dt);
             }
 
             // Draw callback ?
