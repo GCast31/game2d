@@ -1,6 +1,3 @@
-use std::ops::Deref;
-
-
 
 pub const GAME_FONT_DEFAULT_: &'static str = "fonts/Vera.ttf";
 pub const GAME_FONT_DEFAULT_SIZE: FontSize = 11;
@@ -33,11 +30,6 @@ pub type Force = f32;
 // 2D
 #[derive(Clone, Copy)]
 pub struct Velocity2d{pub vx: Velocity, pub vy: Velocity }
-impl Deref for Velocity2d {
-    fn deref(&self) -> &Self::Target {
-        
-    }
-}
 
 #[derive(Clone, Copy)]
 pub struct Point2d{ pub x: Position, pub y: Position }
@@ -54,8 +46,8 @@ pub struct Force2d{ pub fx: Force, pub fy: Force }
 impl Force2d {
     pub fn new(angle: Angle, speed: Velocity2d) -> Self {
         let angle_radian = angle.to_radians();
-        let fx: Velocity = (angle_radian.cos() * speed.x as Angle) as Velocity;
-        let fy: Velocity = (angle_radian.sin() * speed.y as Angle) as Velocity;
+        let fx: Velocity = (angle_radian.cos() * speed.vx as Angle) as Velocity;
+        let fy: Velocity = (angle_radian.sin() * speed.vy as Angle) as Velocity;
         Self {
             fx,
             fy,
@@ -74,8 +66,21 @@ impl Point2d {
 
     pub fn add_velocity2d(position: &Point2d, velocity: &Velocity2d) -> Point2d {
         Point2d {
-            x: (position.x as Velocity + velocity.x) as Position,
-            y: (position.y as Velocity + velocity.y) as Position
+            x: (position.x as Velocity + velocity.vx) as Position,
+            y: (position.y as Velocity + velocity.vy) as Position
+        }
+    }
+}
+
+impl Position2d {
+    pub fn add_velocity(position: Position, velocity: &Velocity) -> Position {
+        (position as Velocity + velocity) as Position
+    }
+
+    pub fn add_velocity2d(position: &Point2d, velocity: &Velocity2d) -> Point2d {
+        Point2d {
+            x: (position.x as Velocity + velocity.vx) as Position,
+            y: (position.y as Velocity + velocity.vy) as Position
         }
     }
 }
