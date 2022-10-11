@@ -34,6 +34,7 @@ pub struct Velocity2d{pub x: Velocity, pub y: Velocity }
 
 #[derive(Clone, Copy)]
 pub struct Point2d{ pub x: Position, pub y: Position }
+pub type Position2d = Point2d;
 
 #[derive(Clone, Copy)]
 pub struct Dimension2d{ pub h: Dimension, pub w: Dimension }
