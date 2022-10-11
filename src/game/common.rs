@@ -1,3 +1,5 @@
+use std::ops::Deref;
+
 
 
 pub const GAME_FONT_DEFAULT_: &'static str = "fonts/Vera.ttf";
@@ -30,11 +32,18 @@ pub type Force = f32;
 
 // 2D
 #[derive(Clone, Copy)]
-pub struct Velocity2d{pub x: Velocity, pub y: Velocity }
+pub struct Velocity2d{pub vx: Velocity, pub vy: Velocity }
+impl Deref for Velocity2d {
+    fn deref(&self) -> &Self::Target {
+        
+    }
+}
 
 #[derive(Clone, Copy)]
 pub struct Point2d{ pub x: Position, pub y: Position }
-pub type Position2d = Point2d;
+
+#[derive(Clone, Copy)]
+pub struct Position2d{ pub x: Position, pub y: Position }
 
 #[derive(Clone, Copy)]
 pub struct Dimension2d{ pub h: Dimension, pub w: Dimension }
