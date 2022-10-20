@@ -1,3 +1,5 @@
+use std::ops::Add;
+
 
 pub const GAME_FONT_DEFAULT_: &'static str = "fonts/Vera.ttf";
 pub const GAME_FONT_DEFAULT_SIZE: FontSize = 11;
@@ -59,28 +61,15 @@ impl Force2d {
 #[derive(Clone, Copy)]
 pub struct Scale2d{ pub sx: Transformation, pub sy: Transformation }
 
-impl Point2d {
-    pub fn add_velocity(position: Position, velocity: &Velocity) -> Position {
-        (position as Velocity + velocity) as Position
-    }
 
-    pub fn add_velocity2d(position: &Point2d, velocity: &Velocity2d) -> Point2d {
-        Point2d {
-            x: (position.x as Velocity + velocity.vx) as Position,
-            y: (position.y as Velocity + velocity.vy) as Position
+impl Add<Velocity2d> for Position2d {
+
+    type Output = Position2d;
+
+    fn add(self, rhs: Velocity2d) -> Self::Output {
+        Self {
+            x: self.x + rhs.vx,
+            y: self.y + rhs.vy,
         }
     }
-}
-
-impl Position2d {
-    pub fn add_velocity(position: Position, velocity: &Velocity) -> Position {
-        (position as Velocity + velocity) as Position
-    }
-
-    pub fn add_velocity2d(position: &Point2d, velocity: &Velocity2d) -> Point2d {
-        Point2d {
-            x: (position.x as Velocity + velocity.vx) as Position,
-            y: (position.y as Velocity + velocity.vy) as Position
-        }
-    }
-}
+}  
