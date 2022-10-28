@@ -14,7 +14,7 @@ pub trait Sizable {
 pub trait Movable : Positionable {
     fn get_velocity(&self) -> &Velocity2d;
     fn get_mut_velocity(&mut self) -> &mut Velocity2d;
-    fn set_velocity(&mut self);
+    fn set_velocity(&mut self, _velocity: Velocity2d);
 }
 
 pub trait WithScale {
@@ -22,7 +22,7 @@ pub trait WithScale {
 }
 
 pub trait Scalable {
-    fn set_scale(&mut self);
+    fn set_scale(&mut self, _scale: Scale2d);
 }
 
 pub trait WithPosition {
@@ -30,7 +30,7 @@ pub trait WithPosition {
 }
 
 pub trait Positionable {
-    fn set_position(&mut self);
+    fn set_position(&mut self, _position: Position2d);
 }
 
 pub trait Standing {
