@@ -21,6 +21,17 @@ pub trait Positionable {
     fn get_mut_position(&mut self) -> &mut Position2d;
 }
 
+pub trait Standing {
+    fn get_standing(&self) -> &bool;
+    fn get_mut_standing(&mut self) -> &mut bool;
+}
+
+pub trait Falling {
+    fn get_falling(&self) -> &bool;
+    fn get_mut_falling(&mut self) -> &mut bool;
+}
+
+
 // Primitives
 pub type Angle = f64;
 
