@@ -4,10 +4,18 @@ use std::ops::Add;
 pub const GAME_FONT_DEFAULT_: &'static str = "fonts/Vera.ttf";
 pub const GAME_FONT_DEFAULT_SIZE: FontSize = 11;
 
-pub trait Sizable {}
-pub trait Movable {}
-pub trait Scalable {}
-pub trait Positionable {}
+pub trait Sizable {
+    fn get_size(&mut self) -> Size2d;
+}
+pub trait Movable {
+    fn mov(&mut self);
+}
+pub trait Scalable {
+    fn get_scale(&mut self) -> Scale2d;
+}
+pub trait Positionable {
+    fn get_position(&mut self) -> Position2d;
+}
 
 // Primitives
 pub type Angle = f64;
