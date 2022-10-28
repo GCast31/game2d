@@ -38,6 +38,14 @@ impl Sprites {
         self.datas.get_mut(&typeid)
     }
 
+    pub fn get_all(&self) -> &HashMap<TypeId, Vec<Box<dyn SpriteTrait>>> {
+        &self.datas
+    }
+
+    pub fn get_all_mut(&mut self) -> &HashMap<TypeId, Vec<Box<dyn SpriteTrait>>> {
+        &mut self.datas
+    }
+
     pub fn draw(&mut self, graphics: &mut Graphics) {
         for typeid in self.datas.iter_mut() {
             for entity in typeid.1.iter_mut() {
