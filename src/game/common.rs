@@ -31,6 +31,15 @@ pub trait Falling {
     fn set_falling(&mut self, _falling: bool) {} 
 }
 
+pub trait Jumping {
+    fn get_jumping(&self) -> bool { false }
+    fn set_jumping(&mut self, _jumping: bool) {}
+}
+
+pub trait Flying {
+    fn get_flying(&self) -> bool { false }
+    fn set_flying(&mut self, _jumping: bool) {}
+}
 
 // Primitives
 pub type Angle = f64;
