@@ -4,10 +4,10 @@ use std::collections::HashMap;
 use crate::graphics::graphics::{Drawable, Graphics};
 use super::game::Updatable;
 use super::inputs::Inputs;
-use super::common::DeltaTime;
+use super::common::{DeltaTime, Sizable, Positionable};
 
 
-pub trait SpriteTrait: Drawable + Updatable {}
+pub trait SpriteTrait: Drawable + Updatable + Sizable + Positionable {}
 
 pub struct Sprites {
     datas: HashMap<TypeId, Vec<Box<dyn SpriteTrait>>>,
