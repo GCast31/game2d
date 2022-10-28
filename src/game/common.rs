@@ -6,7 +6,6 @@ pub const GAME_FONT_DEFAULT_SIZE: FontSize = 11;
 
 pub trait WithSize {
     fn get_size(&self) -> &Size2d;
-    fn get_mut_size(&mut self) -> &mut Size2d;
 }
 
 pub trait Sizable {
@@ -15,11 +14,11 @@ pub trait Sizable {
 pub trait Movable : Positionable {
     fn get_velocity(&self) -> &Velocity2d;
     fn get_mut_velocity(&mut self) -> &mut Velocity2d;
+    fn set_velocity(&mut self);
 }
 
 pub trait WithScale {
     fn get_scale(&self) -> &Scale2d;
-    fn get_mut_scale(&mut self) -> &mut Scale2d;
 }
 
 pub trait Scalable {
@@ -28,7 +27,6 @@ pub trait Scalable {
 
 pub trait WithPosition {
     fn get_position(&self) -> &Position2d;
-    fn get_mut_position(&mut self) -> &mut Position2d;
 }
 
 pub trait Positionable {
