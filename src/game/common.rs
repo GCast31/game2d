@@ -22,13 +22,13 @@ pub trait Positionable {
 }
 
 pub trait Standing {
-    fn get_standing(&self) -> &bool;
-    fn get_mut_standing(&mut self) -> &mut bool;
+    fn get_standing(&self) -> bool { false }
+    fn set_standing(&mut self) {}
 }
 
 pub trait Falling {
-    fn get_falling(&self) -> &bool;
-    fn get_mut_falling(&mut self) -> &mut bool;
+    fn get_falling(&self) -> bool { false }
+    fn set_falling(&mut self) {} 
 }
 
 
