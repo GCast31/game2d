@@ -9,7 +9,7 @@ pub trait WithSize {
 }
 
 pub trait Sizable {
-    fn set_size(&mut self);
+    fn set_size(&mut self, size: Size2d);
 }
 pub trait Movable : Positionable {
     fn get_velocity(&self) -> &Velocity2d;
