@@ -8,7 +8,7 @@ use super::common::{DeltaTime, WithSize, WithPosition, Movable};
 
 
 pub trait SpriteTrait: 
-    Drawable + Updatable + WithSize + WithPosition + Movable {}
+    Any + Drawable + Updatable + WithSize + WithPosition + Movable {}
 
 pub struct Sprites {
     datas: HashMap<TypeId, Vec<Box<dyn SpriteTrait>>>,
