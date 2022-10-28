@@ -10,7 +10,7 @@
 use sdl2::image::LoadTexture;
 use std::collections::HashMap;
 
-use crate::game::common::{Dimension, Position};
+use crate::game::common::{Size, Position};
 
 
 /*================================================================
@@ -20,14 +20,14 @@ use crate::game::common::{Dimension, Position};
 
     fn get_filename(&self) -> String;
     fn get_quad(&self) -> Option<Quad>;
-    fn get_width(&self) -> Dimension;
-    fn get_height(&self) -> Dimension;
+    fn get_width(&self) -> Size;
+    fn get_height(&self) -> Size;
 }
 
  pub(crate) struct _Image {
     filename: String,
-    width: Dimension,
-    height: Dimension,
+    width: Size,
+    height: Size,
     pub(crate) texture: sdl2::render::Texture,
 }
 
@@ -39,11 +39,11 @@ impl ImageInformations for _Image {
     fn get_quad(&self) -> Option<Quad> {
         Option::None
     }
-    fn get_width(&self) -> Dimension {
+    fn get_width(&self) -> Size {
         self.width
     }
 
-    fn get_height(&self) -> Dimension {
+    fn get_height(&self) -> Size {
         self.height
     }
 }
@@ -79,12 +79,12 @@ impl _Image {
  */
 pub struct Image {
     filename: String,
-    width: Dimension,
-    height: Dimension,
+    width: Size,
+    height: Size,
 }
 
 impl Image {
-    pub fn new(filename: String, width: Dimension, height: Dimension) -> Image {
+    pub fn new(filename: String, width: Size, height: Size) -> Image {
         Image { filename, width, height }
     }
 }
@@ -97,11 +97,11 @@ impl ImageInformations for Image {
     fn get_quad(&self) -> Option<Quad> {
         Option::None
     }
-    fn get_width(&self) -> Dimension {
+    fn get_width(&self) -> Size {
         self.width
     }
 
-    fn get_height(&self) -> Dimension {
+    fn get_height(&self) -> Size {
         self.height
     }
 }
@@ -113,13 +113,13 @@ pub struct Quad {
     filename: String,
     x: Position,
     y: Position,
-    width: Dimension,
-    height: Dimension,
+    width: Size,
+    height: Size,
 }
 
 
 impl Quad {
-    pub fn new(filename: String, x: Position, y: Position, width: Dimension, height: Dimension) -> Quad {
+    pub fn new(filename: String, x: Position, y: Position, width: Size, height: Size) -> Quad {
         Quad { filename, x, y, width, height }
     }
     pub fn get_x(&self) -> Position {
@@ -144,10 +144,10 @@ impl ImageInformations for Quad {
             y: self.y,
         })
     }
-    fn get_width(&self) -> Dimension {
+    fn get_width(&self) -> Size {
         self.width
     }
-    fn get_height(&self) -> Dimension {
+    fn get_height(&self) -> Size {
         self.height
     }
 }

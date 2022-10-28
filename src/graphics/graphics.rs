@@ -29,12 +29,12 @@ pub type FontsCreator = TextureCreator<WindowContext>;
 pub struct Rectangle {
     x: Position,
     y: Position,
-    width: Dimension,
-    height: Dimension,
+    width: Size,
+    height: Size,
 }
 
 impl Rectangle {
-    pub fn new(x: Position, y: Position, width: Dimension, height: Dimension) -> Rectangle {
+    pub fn new(x: Position, y: Position, width: Size, height: Size) -> Rectangle {
         Rectangle { x, y, width, height }
     }
 }
@@ -83,8 +83,8 @@ impl Graphics {
      **********************************************************/
     pub fn new(
         title: &str,
-        width: Dimension,
-        height: Dimension,
+        width: Size,
+        height: Size,
         fullscreen: bool,
     ) -> Option<Graphics> {
 
@@ -274,7 +274,7 @@ impl Graphics {
      *
      * @brief : Draw a rectangle
      */
-    pub fn rectangle(&mut self, mode: DrawMode, x: Position, y: Position, width: Dimension, height: Dimension, color: Option<Color>) {
+    pub fn rectangle(&mut self, mode: DrawMode, x: Position, y: Position, width: Size, height: Size, color: Option<Color>) {
 
         let actual_color = self.actual_color;
 
@@ -321,13 +321,13 @@ impl Graphics {
      *
      * @brief : Create a new quad from an image
      **********************************************************/
-    pub fn new_quad(&self, x: Position, y: Position, width: Dimension, height: Dimension, filename: String) -> Result<Quad, String> {
+    pub fn new_quad(&self, x: Position, y: Position, width: Size, height: Size, filename: String) -> Result<Quad, String> {
         
         // Image must be loaded in the images manager
         if let Some(image) = self.images_manager.get_image(&filename) {
             let image_w = image.get_width();
             let image_h = image.get_height();
-            if x as Dimension + width > image_w || y as Dimension + height > image_h {
+            if x as Size + width > image_w || y as Size + height > image_h {
                 return Err(format!("Image {} must contain quad", filename));
             }
             else {

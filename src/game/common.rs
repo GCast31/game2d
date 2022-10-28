@@ -4,6 +4,11 @@ use std::ops::Add;
 pub const GAME_FONT_DEFAULT_: &'static str = "fonts/Vera.ttf";
 pub const GAME_FONT_DEFAULT_SIZE: FontSize = 11;
 
+pub trait Sizable {}
+pub trait Movable {}
+pub trait Scalable {}
+pub trait Positionable {}
+
 // Primitives
 pub type Angle = f64;
 
@@ -21,7 +26,7 @@ pub fn angle_add(angle_src: Angle, angle_to_add: Angle, cap: bool) -> Angle {
 
 pub type Fps = f32;
 pub type Position = f32;
-pub type Dimension = u32;
+pub type Size = u32;
 pub type Transformation = f32;
 pub type Velocity = f32;
 pub type DeltaTime = f32;
@@ -40,7 +45,7 @@ pub struct Point2d{ pub x: Position, pub y: Position }
 pub struct Position2d{ pub x: Position, pub y: Position }
 
 #[derive(Clone, Copy)]
-pub struct Dimension2d{ pub h: Dimension, pub w: Dimension }
+pub struct Size2d{ pub h: Size, pub w: Size }
 
 #[derive(Clone, Copy)]
 pub struct Force2d{ pub fx: Force, pub fy: Force }
