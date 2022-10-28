@@ -42,7 +42,7 @@ impl Sprites {
         &self.datas
     }
 
-    pub fn get_all_mut(&mut self) -> &HashMap<TypeId, Vec<Box<dyn SpriteTrait>>> {
+    pub fn get_all_mut(&mut self) -> &mut HashMap<TypeId, Vec<Box<dyn SpriteTrait>>> {
         &mut self.datas
     }
 
