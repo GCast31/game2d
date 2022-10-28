@@ -17,7 +17,7 @@
 use crate::game::common::*;
 
 use super::fonts::{FontsManager, FontDetail, FontContext};
-use super::images::{ImagesManager, Quad, Image, _Image};
+use super::images::{ImagesManager, Quad, Image, _Image, ImageInformations};
 use super::color::Color;
 use sdl2::render::{Canvas, BlendMode, TextureCreator};
 use sdl2::video::{Window, WindowContext};
@@ -39,16 +39,8 @@ impl Rectangle {
     }
 }
 
-pub trait Draw {
-    fn draw(&mut self, graphics: &mut Graphics);
-}
-
 pub trait Drawable {
-
-    fn get_filename(&self) -> String;
-    fn get_quad(&self) -> Option<Quad>;
-    fn get_width(&self) -> Dimension;
-    fn get_height(&self) -> Dimension;
+    fn draw(&mut self, graphics: &mut Graphics);
 }
 
 #[allow(dead_code)]
@@ -357,7 +349,7 @@ impl Graphics {
      **********************************************************/
     pub fn draw(
         &mut self,
-        drawable: &dyn Drawable, 
+        drawable: &dyn ImageInformations, 
         x: Position, 
         y: Position, 
         angle: Angle,
@@ -374,7 +366,7 @@ impl Graphics {
      **********************************************************/
     pub fn draw_full(
         &mut self,
-        drawable: &dyn Drawable, 
+        drawable: &dyn ImageInformations, 
         x: Position, 
         y: Position, 
         angle: Angle,

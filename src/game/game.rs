@@ -18,6 +18,10 @@ pub type GameCallbackQuit<T>        = fn(&mut Graphics, &mut Option<T>);
 pub type GameCallbackUpdate<T>      = fn(&mut Graphics, &mut Option<T>, &mut Inputs, DeltaTime);
 
 
+pub trait Updatable {
+    fn update(&mut self, graphics: &mut Graphics, inputs: &mut Inputs, dt: &DeltaTime);
+}
+
 #[allow(dead_code)]
 pub struct Game<T> { 
 

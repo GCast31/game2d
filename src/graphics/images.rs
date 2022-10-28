@@ -12,19 +12,26 @@ use std::collections::HashMap;
 
 use crate::game::common::{Dimension, Position};
 
-use super::graphics::Drawable;
 
 /*================================================================
  *                         _ I M A G E
  *================================================================*/
-pub(crate) struct _Image {
+ pub trait ImageInformations {
+
+    fn get_filename(&self) -> String;
+    fn get_quad(&self) -> Option<Quad>;
+    fn get_width(&self) -> Dimension;
+    fn get_height(&self) -> Dimension;
+}
+
+ pub(crate) struct _Image {
     filename: String,
     width: Dimension,
     height: Dimension,
     pub(crate) texture: sdl2::render::Texture,
 }
 
-impl Drawable for _Image {
+impl ImageInformations for _Image {
 
     fn get_filename(&self) -> String {
         self.filename.clone()
@@ -82,7 +89,7 @@ impl Image {
     }
 }
 
-impl Drawable for Image {
+impl ImageInformations for Image {
 
     fn get_filename(&self) -> String {
         self.filename.clone()
@@ -123,7 +130,7 @@ impl Quad {
     }
 }
 
-impl Drawable for Quad {
+impl ImageInformations for Quad {
 
     fn get_filename(&self) -> String {
         self.filename.clone()
