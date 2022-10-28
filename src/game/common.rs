@@ -8,8 +8,9 @@ pub trait Sizable {
     fn get_size(&self) -> &Size2d;
     fn get_mut_size(&mut self) -> &mut Size2d;
 }
-pub trait Movable {
-    fn mov(&mut self);
+pub trait Movable : Positionable {
+    fn get_velocity(&self) -> &Velocity2d;
+    fn get_mut_velocity(&mut self) -> &mut Velocity2d;
 }
 pub trait Scalable {
     fn get_scale(&self) -> &Scale2d;
