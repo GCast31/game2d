@@ -1,17 +1,16 @@
 use std::any::{Any, TypeId}; 
 use std::collections::HashMap;
 
-use crate::graphics::graphics::{Drawable, Graphics};
+use crate::graphics::graphics::{Drawable};
 use super::game::Updatable;
-use super::inputs::Inputs;
-use super::common::{DeltaTime, WithSize, WithPosition, Movable};
+use super::common::{WithSize, WithPosition, Movable};
 
 
 pub trait SpriteTrait: 
     Any +Drawable + Updatable + WithSize + WithPosition + Movable {}
 
 pub struct Sprites {
-    datas: HashMap<TypeId, Vec<Box<dyn SpriteTrait>>>,
+    datas: HashMap<TypeId, Vec<Box<dyn Any>>>,
 }
 
 impl Sprites {
@@ -29,37 +28,21 @@ impl Sprites {
         }
     }
 
-    pub fn get<T: SpriteTrait + 'static>(&self, entity: T) -> Option<&Vec<Box<dyn SpriteTrait>>> {
+    pub fn get<T: SpriteTrait + 'static>(&self, entity: T) -> Option<&Vec<Box<dyn Any>>> {
         let typeid = entity.type_id();
         self.datas.get(&typeid)
     }
 
-    pub fn get_mut<T: SpriteTrait + 'static>(&mut self, entity: T) -> Option<&mut Vec<Box<dyn SpriteTrait>>> {
+    pub fn get_mut<T: SpriteTrait + 'static>(&mut self, entity: T) -> Option<&mut Vec<Box<dyn Any>>> {
         let typeid = entity.type_id();
         self.datas.get_mut(&typeid)
     }
 
-    pub fn get_all(&self) -> &HashMap<TypeId, Vec<Box<dyn SpriteTrait>>> {
+    pub fn get_all(&self) -> &HashMap<TypeId, Vec<Box<dyn Any>>> {
         &self.datas
     }
 
-    pub fn get_all_mut(&mut self) -> &mut HashMap<TypeId, Vec<Box<dyn SpriteTrait>>> {
+    pub fn get_all_mut(&mut self) -> &mut HashMap<TypeId, Vec<Box<dyn Any>>> {
         &mut self.datas
-    }
-
-    pub fn draw(&mut self, graphics: &mut Graphics) {
-        for typeid in self.datas.iter_mut() {
-            for entity in typeid.1.iter_mut() {
-                entity.draw(graphics);
-            }
-        }
-    }
-
-    pub fn update(&mut self, graphics: &mut Graphics, inputs: &mut Inputs, dt: &DeltaTime) {
-        for typeid in self.datas.iter_mut() {
-            for entity in typeid.1.iter_mut() {
-                entity.update(graphics, inputs, &dt);
-            }
-        }
     }
 }
