@@ -461,8 +461,8 @@ impl Graphics {
 
     ) {
 
-        let mut scalex = sx * self.actuel_scale.sx;
-        let mut scaley = sy * self.actuel_scale.sy;
+        let mut scalex = sx ;
+        let mut scaley = sy ;
 
         let mut dst = sdl2::rect::Rect::new((x * self.actuel_scale.sx) as i32 , (y * self.actuel_scale.sy) as i32, _image.get_width(), _image.get_height());
         dst.h = ((dst.h as Transformation) * scalex) as i32;
