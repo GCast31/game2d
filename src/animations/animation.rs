@@ -1,11 +1,11 @@
 
 use std::time::SystemTime;
 
-use crate::graphics::images::ImageInformations;
+use crate::graphics::images::ImageFromString;
 
 pub struct Animation {
     actual_sprite: usize,
-    images: Vec<Box<dyn ImageInformations>>,
+    images: Vec<Box<dyn ImageFromString>>,
     delay_between_two_images_in_ms: Option<u128>,
     last_change: Option<SystemTime>,
 }
@@ -22,7 +22,7 @@ impl Animation {
         }
     }
 
-    pub fn add<T: ImageInformations + 'static>(&mut self, image: Box::<T>) {
+    pub fn add<T: ImageFromString + 'static>(&mut self, image: Box::<T>) {
         self.images.push(image);
     }
 
@@ -34,7 +34,7 @@ impl Animation {
         self.delay_between_two_images_in_ms = Option::None;
     }
 
-    pub fn run(&mut self) -> Option<&Box<dyn ImageInformations>> {
+    pub fn run(&mut self) -> Option<&Box<dyn ImageFromString>> {
 
         let mut must_change = true;
 
