@@ -26,7 +26,7 @@ pub trait WithScale {
 pub trait Scalable {
     fn set_scale(&mut self, _scale: Scale2d);
     fn set_sx(&mut self, sx: Transformation);
-    fn set_sy(&mut self, sx: Transformation);
+    fn set_sy(&mut self, sy: Transformation);
 }
 
 pub trait WithPosition {
@@ -36,7 +36,7 @@ pub trait WithPosition {
 pub trait Positionable {
     fn set_position(&mut self, _position: Position2d);
     fn set_x(&mut self, x: Position);
-    fn set_y(&mut self, x: Position);
+    fn set_y(&mut self, y: Position);
 }
 
 pub trait Standing {
