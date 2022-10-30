@@ -17,7 +17,7 @@
 use crate::game::common::*;
 
 use super::fonts::{FontsManager, FontDetail, FontContext};
-use super::images::{ImagesManager, Quad, Image, _Image, ImageInformations};
+use super::images::{ImagesManager, Quad, Image, _Image, ImageInformations, ImageFromString};
 use super::color::Color;
 use sdl2::render::{Canvas, BlendMode, TextureCreator};
 use sdl2::video::{Window, WindowContext};
@@ -362,7 +362,7 @@ impl Graphics {
      **********************************************************/
     pub fn draw(
         &mut self,
-        drawable: &dyn ImageInformations, 
+        drawable: &dyn ImageFromString, 
         x: Position, 
         y: Position, 
         angle: Angle,
@@ -379,7 +379,7 @@ impl Graphics {
      **********************************************************/
     pub fn draw_full(
         &mut self,
-        drawable: &dyn ImageInformations, 
+        drawable: &dyn ImageFromString, 
         x: Position, 
         y: Position, 
         angle: Angle,
@@ -448,6 +448,74 @@ impl Graphics {
         }
     }
 
+    fn _draw_image(
+        &mut self,
+        _image: &_Image, 
+        x: Position, 
+        y: Position, 
+        angle: Angle,
+        sx: Transformation,
+        sy: Transformation,
+        ox: Position,
+        oy: Position,
+
+    ) {
+
+        let mut scalex = sx * self.actuel_scale.sx;
+        let mut scaley = sy * self.actuel_scale.sy;
+
+        let mut dst = sdl2::rect::Rect::new((x * self.actuel_scale.sx) as i32 , (y * self.actuel_scale.sy) as i32, _image.get_width(), _image.get_height());
+        dst.h = ((dst.h as Transformation) * scalex) as i32;
+        dst.w = ((dst.w as Transformation) * scaley) as i32;
+
+        let mut src: Option<sdl2::rect::Rect> = Option::None;
+
+        if let Some(q) = _image.get_quad() {
+            let rect = sdl2::rect::Rect::new((q.get_x() * self.actuel_scale.sx) as i32 * self.actuel_scale.sx as i32, (q.get_y() * self.actuel_scale.sy) as i32 * self.actuel_scale.sy as i32, q.get_width(), q.get_height());
+            src = Some(rect);
+            dst.h = ((rect.h as Transformation) * scalex) as i32;
+            dst.w = ((rect.w as Transformation) * scaley) as i32;
+        }
+
+        let mut w_center = Option::None;
+        if ox!=0. && oy!=0. {
+            w_center = Some(sdl2::rect::Point::new(ox as i32, oy as i32));
+        }
+
+        let flip_h = 
+                    if scalex < 0. {
+                        scalex *= -1.;
+                        true
+                    } 
+                    else { 
+                        false 
+                    };
+
+        let flip_v = 
+            if scaley < 0. {
+                scaley *= -1.;
+                true
+            } 
+            else { 
+                false 
+            };
+
+        match  self.sdl_canvas
+            .copy_ex(
+                &_image.texture, 
+                src, 
+                dst, 
+                angle, 
+                w_center, 
+                flip_h,
+                flip_v, 
+            ) {
+                Ok(_) => {},
+                Err(e) => println!("{}", e),
+            }
+
+    }
+
     //=======================================================================
     //                                 FONTS
     //=======================================================================
@@ -508,7 +576,7 @@ impl Graphics {
         if let Some(font_detail) = &mut self.actual_font {
             if let Some(texture) = fonts_manager.draw_font(&font_detail, texte, &local_color) {
                 let image = _Image::from_texture(texture);
-                self.draw_full(&image, x* self.actuel_scale.sx, y* self.actuel_scale.sy, angle, sx * self.actuel_scale.sx, sy * self.actuel_scale.sy, ox, oy);
+                self._draw_image(&image, x, y, angle, sx, sy, ox, oy);
             }
         }
     }

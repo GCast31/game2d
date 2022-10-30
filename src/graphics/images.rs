@@ -24,6 +24,8 @@ use crate::game::common::{Size, Position};
     fn get_height(&self) -> Size;
 }
 
+pub trait ImageFromString: ImageInformations {}
+
  pub(crate) struct _Image {
     filename: String,
     width: Size,
@@ -89,6 +91,8 @@ impl Image {
     }
 }
 
+impl ImageFromString for Image {}
+
 impl ImageInformations for Image {
 
     fn get_filename(&self) -> String {
@@ -117,6 +121,8 @@ pub struct Quad {
     height: Size,
 }
 
+
+impl ImageFromString for Quad {}
 
 impl Quad {
     pub fn new(filename: String, x: Position, y: Position, width: Size, height: Size) -> Quad {
