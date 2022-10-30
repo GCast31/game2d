@@ -1,6 +1,6 @@
 
 use std::collections::HashMap;
-use crate::{animations::animation::Animation, graphics::images::ImageInformations};
+use crate::{animations::animation::Animation, graphics::images::ImageFromString};
 
 pub struct AnimationsManager {
     current: Option<String>,
@@ -53,7 +53,7 @@ impl AnimationsManager {
         Option::None
     }
 
-    pub fn run_current(&mut self) -> Option<&Box<dyn ImageInformations>> {
+    pub fn run_current(&mut self) -> Option<&Box<dyn ImageFromString>> {
         let current = self.get_current();
         match current {
             Some(animation) => {
