@@ -391,19 +391,19 @@ impl Graphics {
     ) {
         let image = self.images_manager.get_image(drawable.get_filename().as_str());
 
-        let scalex = sx * self.actuel_scale.sx;
-        let scaley = sy * self.actuel_scale.sy;
+        let mut scalex = sx * self.actuel_scale.sx;
+        let mut scaley = sy * self.actuel_scale.sy;
 
         match image {
             Some(i) => {
-                let mut dst = sdl2::rect::Rect::new(x as i32, y as i32, i.get_width(), i.get_height());
+                let mut dst = sdl2::rect::Rect::new((x * self.actuel_scale.sx)as i32,(y * self.actuel_scale.sy) as i32, i.get_width(), i.get_height());
                 dst.h = ((dst.h as Transformation) * scalex) as i32;
                 dst.w = ((dst.w as Transformation) * scaley) as i32;
 
                 let mut src: Option<sdl2::rect::Rect> = Option::None;
 
                 if let Some(q) = drawable.get_quad() {
-                    let rect = sdl2::rect::Rect::new(q.get_x() as i32, q.get_y() as i32 , q.get_width(), q.get_height());
+                    let rect = sdl2::rect::Rect::new((q.get_x() * self.actuel_scale.sx) as i32, (q.get_y() * self.actuel_scale.sy) as i32 , q.get_width(), q.get_height());
                     src = Some(rect);
                     dst.h = ((rect.h as Transformation) * scalex) as i32;
                     dst.w = ((rect.w as Transformation) * scaley) as i32;
@@ -414,6 +414,24 @@ impl Graphics {
                     w_center = Some(sdl2::rect::Point::new(ox as i32, oy as i32));
                 }
 
+                let flip_h = 
+                    if scalex < 0. {
+                        scalex *= -1.;
+                        true
+                    } 
+                    else { 
+                        false 
+                    };
+
+                let flip_v = 
+                    if scaley < 0. {
+                        scaley *= -1.;
+                        true
+                    } 
+                    else { 
+                        false 
+                    };
+
                 self.sdl_canvas
                     .copy_ex(
                         &i.texture, 
@@ -421,8 +439,8 @@ impl Graphics {
                         dst, 
                         angle, 
                         w_center, 
-                        false,
-                        false 
+                        flip_h,
+                        flip_v, 
                     )
                     .unwrap();
             }
@@ -443,17 +461,17 @@ impl Graphics {
 
     ) {
 
-        let scalex = sx * self.actuel_scale.sx;
-        let scaley = sy * self.actuel_scale.sy;
+        let mut scalex = sx * self.actuel_scale.sx;
+        let mut scaley = sy * self.actuel_scale.sy;
 
-        let mut dst = sdl2::rect::Rect::new(x as i32, y as i32, _image.get_width(), _image.get_height());
+        let mut dst = sdl2::rect::Rect::new((x * self.actuel_scale.sx) as i32 , (y * self.actuel_scale.sy) as i32, _image.get_width(), _image.get_height());
         dst.h = ((dst.h as Transformation) * scalex) as i32;
         dst.w = ((dst.w as Transformation) * scaley) as i32;
 
         let mut src: Option<sdl2::rect::Rect> = Option::None;
 
         if let Some(q) = _image.get_quad() {
-            let rect = sdl2::rect::Rect::new(q.get_x() as i32, q.get_y() as i32 , q.get_width(), q.get_height());
+            let rect = sdl2::rect::Rect::new((q.get_x() * self.actuel_scale.sx) as i32 * self.actuel_scale.sx as i32, (q.get_y() * self.actuel_scale.sy) as i32 * self.actuel_scale.sy as i32, q.get_width(), q.get_height());
             src = Some(rect);
             dst.h = ((rect.h as Transformation) * scalex) as i32;
             dst.w = ((rect.w as Transformation) * scaley) as i32;
@@ -464,6 +482,24 @@ impl Graphics {
             w_center = Some(sdl2::rect::Point::new(ox as i32, oy as i32));
         }
 
+        let flip_h = 
+                    if scalex < 0. {
+                        scalex *= -1.;
+                        true
+                    } 
+                    else { 
+                        false 
+                    };
+
+        let flip_v = 
+            if scaley < 0. {
+                scaley *= -1.;
+                true
+            } 
+            else { 
+                false 
+            };
+
         match  self.sdl_canvas
             .copy_ex(
                 &_image.texture, 
@@ -471,8 +507,8 @@ impl Graphics {
                 dst, 
                 angle, 
                 w_center, 
-                false,
-                false 
+                flip_h,
+                flip_v, 
             ) {
                 Ok(_) => {},
                 Err(e) => println!("{}", e),
@@ -540,7 +576,7 @@ impl Graphics {
         if let Some(font_detail) = &mut self.actual_font {
             if let Some(texture) = fonts_manager.draw_font(&font_detail, texte, &local_color) {
                 let image = _Image::from_texture(texture);
-                self._draw_image(&image, x, y, angle, sx, sy, ox, oy);
+                self.draw_full(&image, x, y, angle, sx, sy, ox, oy);
             }
         }
     }
