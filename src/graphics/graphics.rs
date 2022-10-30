@@ -471,7 +471,7 @@ impl Graphics {
         let mut src: Option<sdl2::rect::Rect> = Option::None;
 
         if let Some(q) = _image.get_quad() {
-            let rect = sdl2::rect::Rect::new((q.get_x() * self.actuel_scale.sx) as i32 * self.actuel_scale.sx as i32, (q.get_y() * self.actuel_scale.sy) as i32 * self.actuel_scale.sy as i32, q.get_width(), q.get_height());
+            let rect = sdl2::rect::Rect::new((q.get_x() * self.actuel_scale.sx) as i32 , (q.get_y() * self.actuel_scale.sy) as i32 , q.get_width(), q.get_height());
             src = Some(rect);
             dst.h = ((rect.h as Transformation) * scalex) as i32;
             dst.w = ((rect.w as Transformation) * scaley) as i32;
