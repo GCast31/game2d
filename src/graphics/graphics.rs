@@ -66,6 +66,9 @@ pub struct Graphics {
 
     //==== Fonts
     actual_font: Option<FontDetail>,
+
+    //==== Scale
+    actuel_scale: Scale2d,
 }
 
 #[allow(dead_code)]
@@ -132,8 +135,18 @@ impl Graphics {
             font_color: Color::WHITE,
 
             actual_font: Option::None,
+            actuel_scale: Scale2d { sx: 1., sy: 1. }
             
         })
+    }
+
+    /***********************************************************
+     * set_scale()
+     *
+     * @Brief : Set scale
+     */
+    pub fn set_scale(&mut self, scale: Scale2d) {
+        self.actuel_scale = scale;
     }
 
     /***********************************************************
@@ -378,19 +391,22 @@ impl Graphics {
     ) {
         let image = self.images_manager.get_image(drawable.get_filename().as_str());
 
+        let scalex = sx * self.actuel_scale.sx;
+        let scaley = sy * self.actuel_scale.sy;
+
         match image {
             Some(i) => {
                 let mut dst = sdl2::rect::Rect::new(x as i32, y as i32, i.get_width(), i.get_height());
-                dst.h = ((dst.h as Transformation) * sx) as i32;
-                dst.w = ((dst.w as Transformation) * sy) as i32;
+                dst.h = ((dst.h as Transformation) * scalex) as i32;
+                dst.w = ((dst.w as Transformation) * scaley) as i32;
 
                 let mut src: Option<sdl2::rect::Rect> = Option::None;
 
                 if let Some(q) = drawable.get_quad() {
                     let rect = sdl2::rect::Rect::new(q.get_x() as i32, q.get_y() as i32 , q.get_width(), q.get_height());
                     src = Some(rect);
-                    dst.h = ((rect.h as Transformation) * sx) as i32;
-                    dst.w = ((rect.w as Transformation) * sy) as i32;
+                    dst.h = ((rect.h as Transformation) * scalex) as i32;
+                    dst.w = ((rect.w as Transformation) * scaley) as i32;
                 }
 
                 let mut w_center = Option::None;
@@ -426,17 +442,21 @@ impl Graphics {
         oy: Position,
 
     ) {
+
+        let scalex = sx * self.actuel_scale.sx;
+        let scaley = sy * self.actuel_scale.sy;
+
         let mut dst = sdl2::rect::Rect::new(x as i32, y as i32, _image.get_width(), _image.get_height());
-        dst.h = ((dst.h as Transformation) * sx) as i32;
-        dst.w = ((dst.w as Transformation) * sy) as i32;
+        dst.h = ((dst.h as Transformation) * scalex) as i32;
+        dst.w = ((dst.w as Transformation) * scaley) as i32;
 
         let mut src: Option<sdl2::rect::Rect> = Option::None;
 
         if let Some(q) = _image.get_quad() {
             let rect = sdl2::rect::Rect::new(q.get_x() as i32, q.get_y() as i32 , q.get_width(), q.get_height());
             src = Some(rect);
-            dst.h = ((rect.h as Transformation) * sx) as i32;
-            dst.w = ((rect.w as Transformation) * sy) as i32;
+            dst.h = ((rect.h as Transformation) * scalex) as i32;
+            dst.w = ((rect.w as Transformation) * scaley) as i32;
         }
 
         let mut w_center = Option::None;
